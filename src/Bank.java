@@ -1,19 +1,36 @@
 import java.util.Scanner;
 
-public class Bank {
+public class Bank{
 
-    public double saldo;
-    public String nomeUsuario;
-    public String tipoConta;
+    private double saldo = 0;
+    private String nomeUsuario;
+    private String tipoConta;
 
-    Scanner leitor = new Scanner(System.in);
+    public double getSaldo() {
+        return saldo;
+    }
 
-    Bank(double saldoInicial, String nomeUsuario, String tipoConta)
-    {
-        this.saldo = saldoInicial;
+    public void setSaldo(double saldo) {
+        this.saldo = saldo;
+    }
+
+    public String getNomeUsuario() {
+        return nomeUsuario;
+    }
+
+    public void setNomeUsuario(String nomeUsuario) {
         this.nomeUsuario = nomeUsuario;
+    }
+
+    public String getTipoConta() {
+        return tipoConta;
+    }
+
+    public void setTipoConta(String tipoConta) {
         this.tipoConta = tipoConta;
     }
+
+    Scanner leitor = new Scanner(System.in);
 
     public void interfaceBank()
     {
@@ -27,12 +44,13 @@ public class Bank {
                 Saldo : %.2f
                 
                 ************************************************
-                """.formatted(nomeUsuario, tipoConta, saldo);
+                """.formatted(getNomeUsuario(), getTipoConta(), getSaldo());
         System.out.println(tela);
     }
 
     public void menuBank()
     {
+        int opcao = 0;
         while(opcao != 4)
         {
             String menu = """
@@ -45,40 +63,32 @@ public class Bank {
                     
                     """;
             System.out.println(menu);
-            int opcao = leitor.nextInt();
+            opcao = leitor.nextInt();
             switch (opcao)
             {
                 case 1:
                     consultarSaldo();
                     break;
-
                 case 2:
                     receberTransferencia();
                     break;
-
                 case 3:
                     transferenciaaBancaria();
                     break;
-
                 case 4:
-                    System.out.println("Encerrando aplicativo...");
                     break;
-
                 default:
                     System.out.println("Nenhuma opção inserida");
                     break;
 
             }
-           if(opcao == 4)
-           {
-               break;
-           }
+
         }
     }
 
     public void consultarSaldo()
     {
-        System.out.println("Saldo atual : R$ " + saldo);
+        System.out.println("Saldo atual : R$ " + getSaldo());
     }
 
     public void receberTransferencia()
@@ -86,11 +96,10 @@ public class Bank {
         System.out.println("Digite o valor a ser recebido");
         double valorTransferencia = leitor.nextDouble();
 
-        if(valorTransferencia > 0) {
-            saldo += valorTransferencia;
-        }
-        else{
+        if (!(valorTransferencia > 0)) {
             System.out.println("Não foi possível receber este valor, insira um valor válido");
+        } else {
+            setSaldo(valorTransferencia);
         }
     }
 
@@ -99,11 +108,11 @@ public class Bank {
         System.out.println("Digite o valor a ser transferido");
         double valorTransferencia = leitor.nextDouble();
 
-        if(valorTransferencia > 0 && valorTransferencia <= saldo) {
-            saldo -= valorTransferencia;
+        if(valorTransferencia > 0 && valorTransferencia <= getSaldo()) {
+             setSaldo(getSaldo()-valorTransferencia);
         }
         else{
-            System.out.println("Não foi possível receber este valor, insira um valor válido");
+            System.out.println("Não foi possível transferir este valor este valor, insira um valor válido");
         }
     }
 }
